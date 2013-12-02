@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A class providing an iterator over all combinations of a certain number 
@@ -116,6 +117,11 @@ public final class UnorderedCombinationIterable<T> implements Iterable<List<T>>
     @Override
     public Iterator<List<T>> iterator()
     {
+        if (length == 0)
+        {
+            return Collections.<List<T>>singletonList(
+                Collections.<T>emptyList()).iterator();
+        }
         return new Iterator<List<T>>()
         {
             /**
@@ -145,6 +151,10 @@ public final class UnorderedCombinationIterable<T> implements Iterable<List<T>>
             @Override
             public List<T> next()
             {
+                if (!hasNext())
+                {
+                    throw new NoSuchElementException("No more elements");
+                }
                 current++;
                 return toSelection(positionChoiceIterator.next());
             }

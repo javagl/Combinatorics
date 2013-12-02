@@ -30,6 +30,7 @@ package de.javagl.utils.math.combinatorics;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -103,6 +104,11 @@ public final class PowerSetIterable<T> implements Iterable<List<T>>
             @Override
             public List<T> next()
             {
+                if (!hasNext())
+                {
+                    throw new NoSuchElementException("No more elements");
+                }
+                
                 List<T> element = new ArrayList<T>();
  
                 // Insert into the current power set element

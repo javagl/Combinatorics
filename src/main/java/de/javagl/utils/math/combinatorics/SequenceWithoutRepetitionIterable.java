@@ -1,7 +1,9 @@
 package de.javagl.utils.math.combinatorics;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A class providing an iterator over all sequences without repetition
@@ -59,6 +61,10 @@ public final class SequenceWithoutRepetitionIterable<T>
     @Override
     public Iterator<List<T>> iterator()
     {
+        if (input.size() == 0 || sampleSize == 0)
+        {
+            return Collections.<List<T>>emptyList().iterator();
+        }
         return new Iterator<List<T>>()
         {
             // Sequences without repetition may be constructed
@@ -96,6 +102,10 @@ public final class SequenceWithoutRepetitionIterable<T>
             @Override
             public List<T> next()
             {
+                if (!hasNext())
+                {
+                    throw new NoSuchElementException("No more elements");
+                }
                 if (permutationIterator == null)
                 {
                     List<T> nextChoice = choiceIterator.next();

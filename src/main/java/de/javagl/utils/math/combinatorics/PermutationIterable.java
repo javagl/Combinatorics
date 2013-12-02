@@ -28,8 +28,10 @@
 package de.javagl.utils.math.combinatorics;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A class providing an iterator over all permutations of a set of 
@@ -76,6 +78,11 @@ public final class PermutationIterable<T> implements Iterable<List<T>>
     @Override
     public Iterator<List<T>> iterator()
     {
+        if (input.size() == 0)
+        {
+            return Collections.<List<T>>singletonList(
+                Collections.<T>emptyList()).iterator();
+        }
         return new Iterator<List<T>>()
         {
             /**
@@ -92,6 +99,11 @@ public final class PermutationIterable<T> implements Iterable<List<T>>
             @Override
             public List<T> next()
             {
+                if (!hasNext())
+                {
+                    throw new NoSuchElementException("No more elements");
+                }
+                
                 // Adapted from http://en.wikipedia.org/wiki/Permutation
                 List<T> result = new ArrayList<T>(input);
                 int factorial = numPermutations / input.size();

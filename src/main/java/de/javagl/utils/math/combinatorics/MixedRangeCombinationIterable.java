@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A class providing an iterator over all combinations of a certain number
@@ -121,12 +122,15 @@ public final class MixedRangeCombinationIterable<T> implements Iterable<List<T>>
 
             // Initialize the sub-iterators and the first combination
             {
-                for (int i=0; i<sets.size(); i++)
+                if (numElements > 0)
                 {
-                    Iterator<? extends T> subIterator = 
-                        sets.get(i).iterator();
-                    subIterators.set(i, subIterator);
-                    currentCombination.add(subIterator.next());
+                    for (int i=0; i<sets.size(); i++)
+                    {
+                        Iterator<? extends T> subIterator = 
+                            sets.get(i).iterator();
+                        subIterators.set(i, subIterator);
+                        currentCombination.add(subIterator.next());
+                    }
                 }
             }
             
@@ -139,6 +143,11 @@ public final class MixedRangeCombinationIterable<T> implements Iterable<List<T>>
             @Override
             public List<T> next()
             {
+                if (!hasNext())
+                {
+                    throw new NoSuchElementException("No more elements");
+                }
+                
                 List<T> result = new ArrayList<T>(currentCombination);
                 increase(sets.size()-1);
                 current++;

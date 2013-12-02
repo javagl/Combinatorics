@@ -30,6 +30,7 @@ package de.javagl.utils.math.combinatorics;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A class providing an iterator over all combinations of a certain number
@@ -110,6 +111,11 @@ public final class CombinationIterable<T> implements Iterable<List<T>>
             @Override
             public List<T> next()
             {
+                if (!hasNext())
+                {
+                    throw new NoSuchElementException("No more elements");
+                }
+                
                 List<T> result = new ArrayList<T>(sampleSize);
                 for (int i = 0; i < sampleSize; i++)
                 {
